@@ -4,6 +4,7 @@ require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config();
 require("solidity-coverage");
 require("hardhat-deploy");
+require("@nomiclabs/hardhat-ethers");
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -55,6 +56,7 @@ module.exports = {
         mnemonic: MNEMONIC_SEED,
       },
       saveDeployments: true,
+      blockConfirmations: 6,
     },
     mainnet: {
       chainId: 1,
@@ -63,12 +65,13 @@ module.exports = {
         mnemonic: MNEMONIC_SEED,
       },
       saveDeployments: true,
+      blockConfirmations: 6,
     },
   },
   solidity: {
     compilers: [
       {
-        version: "0.8.7",
+        version: "0.8.8",
       },
     ],
   },

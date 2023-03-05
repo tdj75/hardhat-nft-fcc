@@ -1,25 +1,32 @@
 // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.8;
 
-pragma solidity ^0.8.7;
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+contract BasicNFT is ERC721URIStorage, Ownable {
+    uint256 private itemID;
 
-contract BasicNft is ERC721 {
-        string public constant TOKEN_URI =
-        "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json";
-uint256 private s_tokenCounter;
-
-    constructor() ERC721("Doggie", "DOG") {
-        uint256 private s_tokenCounter;
+    constructor(
+        string memory tokenName,
+        string memory tokenSymbol
+    ) ERC721(tokenName, tokenSymbol) {
+        itemID = 0;
     }
 
-    function mintNft() returns (uint256) {
-        _safeMint(msg.sender, s_tokenCounter);
-        s_tokenCounter = s_tokenCounter + 1;
-        return s_tokenCounter;
+    function mintItem(
+        address player,
+        string memory itemURI
+    ) public onlyOwner returns (uint256) {
+        uint256 newItemID = itemID;
+        itemID = newItemID + 1;
+        _safeMint(player, newItemID);
+        _setTokenURI(newItemID, itemURI);
+
+        return newItemID;
     }
 
-    function getTokenCounter() public view returns (uint256) {
-        return s_tokenCounter;
+    function getCurrentItemID() public view onlyOwner returns (uint256) {
+        return itemID;
     }
 }
